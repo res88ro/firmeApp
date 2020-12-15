@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="539.0" prefWidth="832.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserViewController">
+    <children>
+        <VBox layoutX="239.0" layoutY="94.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Label text="Cauta client" />
+                        <TextField prefHeight="25.0" prefWidth="291.0" promptText="Nume sau CUI">
+                            <HBox.margin>
+                                <Insets left="10.0" />
+                            </HBox.margin>
+                        </TextField>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Cauta">
+                            <HBox.margin>
+                                <Insets left="50.0" />
+                            </HBox.margin>
+                        </Button>
+                  <Button fx:id="arataTot" mnemonicParsing="false" onAction="#showClientTable" prefHeight="25.0" prefWidth="116.0" text="Arata toti clientii" />
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </padding>
+                    <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </VBox.margin>
+                </HBox>
+                <TableView fx:id="tableClient" prefHeight="431.0" prefWidth="832.0">
+                    <columns>
+                        <TableColumn fx:id="colNume" prefWidth="435.0" text="Nume" />
+                        <TableColumn fx:id="colCUI" minWidth="0.0" prefWidth="96.0" text="CUI" />
+                        <TableColumn fx:id="colOras" prefWidth="87.0" text="Oras" />
+                        <TableColumn fx:id="colTel" prefWidth="104.0" text="Numar telefon" />
+                        <TableColumn fx:id="colEdit" prefWidth="109.0" text="Editare" />
+                    </columns>
+                </TableView>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
