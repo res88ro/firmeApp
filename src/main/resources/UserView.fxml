@@ -17,17 +17,17 @@
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
                         <Label text="Cauta client" />
-                        <TextField prefHeight="25.0" prefWidth="291.0" promptText="Nume sau CUI">
+                        <TextField fx:id="txt_search" onAction="#searchClient" prefHeight="25.0" prefWidth="291.0" promptText="Nume sau CUI">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>
                         </TextField>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" text="Cauta">
+                        <Button mnemonicParsing="false" onAction="#searchClient" prefHeight="25.0" prefWidth="65.0" text="Cauta">
                             <HBox.margin>
                                 <Insets left="50.0" />
                             </HBox.margin>
                         </Button>
-                  <Button fx:id="arataTot" mnemonicParsing="false" onAction="#showClientTable" prefHeight="25.0" prefWidth="116.0" text="Arata toti clientii" />
+                  <Button fx:id="arataTot" mnemonicParsing="false" onAction="#arataTotiClientii" prefHeight="25.0" prefWidth="116.0" text="Arata toti clientii" />
                     </children>
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -36,13 +36,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </VBox.margin>
                 </HBox>
-                <TableView fx:id="tableClient" prefHeight="431.0" prefWidth="832.0">
+                <TableView fx:id="tableClient" editable="true" prefHeight="431.0" prefWidth="832.0">
                     <columns>
-                        <TableColumn fx:id="colNume" prefWidth="435.0" text="Nume" />
-                        <TableColumn fx:id="colCUI" minWidth="0.0" prefWidth="96.0" text="CUI" />
-                        <TableColumn fx:id="colOras" prefWidth="87.0" text="Oras" />
-                        <TableColumn fx:id="colTel" prefWidth="104.0" text="Numar telefon" />
-                        <TableColumn fx:id="colEdit" prefWidth="109.0" text="Editare" />
+                        <TableColumn fx:id="colNume" prefWidth="200.0" text="Nume" />
+                        <TableColumn fx:id="colCUI" minWidth="0.0" prefWidth="75.0" text="CUI" />
+                        <TableColumn fx:id="colOras" prefWidth="100.0" text="Oras" />
+                        <TableColumn fx:id="colTel" prefWidth="600.0" text="Numar telefon" />
                     </columns>
                 </TableView>
             </children>

@@ -1,101 +1,122 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-
-import javax.persistence.Query;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 public class UserViewController {
+    private Connection con = null;
+    private PreparedStatement pst = null;
+    private ResultSet rs = null;
+    private ObservableList<Client> data;
 
-    ObservableList<Client> clientList = FXCollections.observableArrayList();
+
     @FXML
-    private Button arataTot;
-
+    private TextField txt_search;
     @FXML
     private TableView<Client> tableClient;
-
     @FXML
     private TableColumn<Client, String> colNume;
-
     @FXML
     private TableColumn<Client, String> colCUI;
-
     @FXML
     private TableColumn<Client, String> colOras;
-
     @FXML
     private TableColumn<Client, String> colTel;
 
-    @FXML
-    private TableColumn colEdit;
-
 
     public void initialize() throws SQLException {
-        showClientTable();
+        con = DBConnetion.getConnection();
+        data = FXCollections.observableArrayList();
+        setCellTable();
+        loadDataFromDB();
 
     }
 
-    public void showClientTable() {
-        Transaction transaction = null;
+    private void setCellTable() {
+        colNume.setCellValueFactory(new PropertyValueFactory<>("numeClient"));
+        colCUI.setCellValueFactory(new PropertyValueFactory<>("CUI"));
+        colOras.setCellValueFactory(new PropertyValueFactory<>("oras"));
+        colTel.setCellValueFactory(new PropertyValueFactory<>("numarTelefon"));
+    }
+
+    private void loadDataFromDB() {
         try {
-            final Session session = HibernateUtils.getSessionFactory().openSession();
-            transaction = session.beginTransaction();
-
-            List<Client> clientsListList = session.createQuery("from Client").getResultList();
-            ObservableList<Client> obList = FXCollections.observableArrayList();
-
-            for (Client tempList : clientsListList) {
-                obList.addAll(new Client(tempList.getIdClient(), tempList.getNumeClient(), tempList.getNumarTelefon(), tempList.getCUI(), tempList.getOras()));
+            pst = con.prepareStatement("Select * from client");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                data.add(new Client("" + rs.getString(4), "" + rs.getString(3), "" + rs.getString(2), "" + rs.getString(5)));
             }
-            // aici ii spunem sa adauge toate acele informatii din lista in tabel
-            tableClient.setItems(obList);
+            pst.close();
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        tableClient.setItems(data);
 
-            colNume.setCellValueFactory(new PropertyValueFactory<>("numeClient"));
-            colCUI.setCellValueFactory(new PropertyValueFactory<>("CUI"));
-            colOras.setCellValueFactory(new PropertyValueFactory<>("oras"));
-            colTel.setCellValueFactory(new PropertyValueFactory<>("numarTelefon"));
+    }
 
-            Callback<TableColumn<Client, String>, TableCell<Client, String>> cellFactory = param -> {
-                final TableCell<Client, String> cell = new TableCell<Client, String>() {
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            final Button editButton = new Button("Editeaza");
-                            editButton.setOnAction(event -> {
+    public void arataTotiClientii() {
+        try {
+            pst = con.prepareStatement("Select * from client");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                data.add(new Client("" + rs.getString(4).trim(),
+                        "" + rs.getString(3).trim(), "" + rs.getString(2).trim(),
+                        "" + rs.getString(5).trim()));
+            }
+            pst.close();
+            rs.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        tableClient.setItems(data);
+        txt_search.clear();
 
-                                Client c = getTableView().getItems().get(getIndex());
+    }
 
-                                Alert a = new Alert(Alert.AlertType.INFORMATION);
-                                a.setContentText("You have clicked \n " + c.getNumeClient() + c.getNumarTelefon());
-                                a.show();
-                            });
-                            setGraphic(editButton);
-                            setText(null);
-                        }
+    public void searchClient() {
+
+        String cautaText = txt_search.getText();
+        System.out.println(cautaText);
+
+                String sql = "Select * from client where nume LIKE '%" + txt_search.getText().trim() + "%' " +
+                        "UNION Select * from Client where CUI LIKE '%" + txt_search.getText().trim()+ "%'";
+
+                try {
+                    data.clear();
+                    pst = con.prepareStatement(sql);
+                    rs = pst.executeQuery();
+                    while (rs.next()) {
+                        System.err.println("" + rs.getString(4));
+                        data.add(new Client("" + rs.getString(4).trim(), "" + rs.getString(3), "" + rs.getString(2), "" + rs.getString(5)));
                     }
-                };
-                return cell;
+                    tableClient.setItems(data);
+                    pst.close();
+                    rs.close();
+
+                } catch (Exception r) {
+
+                }
             };
 
-            colEdit.setCellFactory(cellFactory);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            HibernateUtils.cleanUp();
         }
 
 
-    }
-}
+
+
+
+
+

@@ -22,6 +22,13 @@ public class Client {
     public Client() {
     }
 
+    public Client(String numeClient, String numarTelefon, String CUI, String oras) {
+        this.numeClient = numeClient;
+        this.numarTelefon = numarTelefon;
+        this.CUI = CUI;
+        this.oras = oras;
+    }
+
     public Client(Long idClient, String numeClient, String numarTelefon, String CUI, String oras) {
         this.idClient = idClient;
         this.numeClient = numeClient;
